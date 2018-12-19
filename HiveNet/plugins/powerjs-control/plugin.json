@@ -1,0 +1,12 @@
+{
+  "name": "powerjs-control",
+  "version": "1.0.0",
+  "description": "JS对象加强控件",
+  "client-control": {
+  	"static-resource": [
+  		"js/PowerDate.js",
+  		"js/PowerNumber.js",
+  		"js/PowerString.js"
+  	]
+  }
+}

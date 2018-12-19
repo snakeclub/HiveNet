@@ -1,0 +1,17 @@
+/*------------------ i18n-control的CSS样式  -------------------*/
+
+.i18n-navbar-locale-flag {
+	width:20px;
+	height: 14px;
+	font-size: 20px;
+}
+
+/*---- 导航条格式 ----*/
+
+.i18n-menu-cursor {
+	cursor:pointer;
+}
+
+
+
+

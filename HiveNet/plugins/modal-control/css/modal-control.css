@@ -1,0 +1,45 @@
+
+/*------------------ 全局CSS样式  -------------------*/
+
+/*---- 公共样式 ----*/
+.modal-title-compact {
+	line-height : 1;
+}
+
+.modal-close-compact {
+	line-height : 0.5;
+}
+
+
+/*---- 全页面loading样式 ----*/
+.modal-page-loading-div {
+	height:80px;
+	z-index: 20000; 
+	background-color:#FFF;
+	overflow:hidden;
+	position: absolute; 
+	text-align: center;
+	left: 50%; 
+	top: 50%;
+	padding-top:7px;
+	padding-left:14px;
+	padding-right:14px;
+	margin-left:-70px;
+	margin-top:-70px;
+}
+
+.modal-page-loading-img {
+	width:50px; 
+	height:50px;
+	background-color:#FFF;
+	margin-bottom:-5px;
+}
+
+.modal-page-loading-text {
+	color:#999; 
+	font-size:13px;
+}
+
+
+
+

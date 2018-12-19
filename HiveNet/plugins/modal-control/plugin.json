@@ -1,0 +1,27 @@
+{
+  "name": "modal-control",
+  "version": "1.0.0",
+  "description": "模态框控件",
+  "client-control": {
+  	"basic-plugin-dependencies": {
+  		"jquery>=3.3.1": {
+  			"js": ["js/jquery.min.js"]
+  		}
+  		"bootstrap>=4.1.1": {
+  			"css": ["css/bootstrap.min.css"],
+  			"js": ["js/bootstrap.min.js"]
+  		},
+  		"popper": {
+  			"js": ["js/popper.min.js"]
+  		},
+  		"holder>=2.9.4": {
+  			"js": ["js/holder.min.js"]
+  		}
+  	},
+  	"static-resource": {
+  		"js": ["js/modal-control.js"],
+  		"css": ["css/modal-control.css"],
+  		"pic": ["pic/loading-middle.gif"]
+  	}
+  }
+}

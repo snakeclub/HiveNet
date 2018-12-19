@@ -1,0 +1,26 @@
+{
+  "name": "HiveNet",
+  "version": "0.1.0",
+  "description": "HiveNet Platform basic framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snakeclub/HiveNet.git"
+  },
+  "keywords": [],
+  "author": "黎慧剑",
+  "license": "MPL",
+  "bugs": {
+    "url": "https://github.com/snakeclub/HiveNet/issues"
+  },
+  "homepage": "https://github.com/snakeclub/HiveNet#readme",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}

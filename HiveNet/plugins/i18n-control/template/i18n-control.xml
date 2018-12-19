@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hivenet>
+	<plugin-template plugin-name="i18n-control" version="1.0.0"  plugin-type="client-control" description="国际化控件">
+		<!-- 国际化控件导航栏主模板 -->
+		<template name="nav-main" type="main">
+			<ul id="{$id$}" class="navbar-nav ml-2" hivenet-plugin-name="i18n-control">
+				<li class="nav-item dropdown">
+		    	<a id="{$id$}_NavbarsLocale" class="nav-link i18n-menu-cursor pt-1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		      	<img class="i18n-navbar-locale-flag" data-toggle="tooltip" title="{$change-language-tooltip$}" i18n-control-type="MainImg" src="{$main-flag-img$}"></img>
+		    	</a>
+		      <div class="dropdown-menu" aria-labelledby="{$id$}_NavbarsLocale"> 
+		      	<embed plugin-name="i18n-control" template-name="nav-dropdown-list" embed-type="list" />
+		      </div>
+				</li>
+			</ul>
+		</template>
+		
+		<!-- 国际化控件导航栏菜单模板 -->
+		<template name="nav-dropdown-list" type="sub">
+			<div class="media dropdown-item pl-1 i18n-menu-cursor" href="#" i18n-control-locale='{$locale-code$}'>
+      	<img class="align-self-center mr-2 i18n-navbar-locale-flag" src="{$loacle-flag-img$}"></img>
+        <a>{$locale-name$}</a> 
+      </div>
+		</template>
+	</plugin-template>
+</hivenet>
