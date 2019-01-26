@@ -1,27 +1,406 @@
 {
-  "name": "modal-control",
-  "version": "1.0.0",
-  "description": "模态框控件",
-  "client-control": {
-  	"basic-plugin-dependencies": {
-  		"jquery>=3.3.1": {
-  			"js": ["js/jquery.min.js"]
-  		}
-  		"bootstrap>=4.1.1": {
-  			"css": ["css/bootstrap.min.css"],
-  			"js": ["js/bootstrap.min.js"]
-  		},
-  		"popper": {
-  			"js": ["js/popper.min.js"]
-  		},
-  		"holder>=2.9.4": {
-  			"js": ["js/holder.min.js"]
-  		}
-  	},
-  	"static-resource": {
-  		"js": ["js/modal-control.js"],
-  		"css": ["css/modal-control.css"],
-  		"pic": ["pic/loading-middle.gif"]
-  	}
-  }
+	"name": "modal-control",
+	"version": "1.0.0",
+	"description": "模态框控件",
+	"basic-plugin-dependencies": {
+		"jquery>=3.3.1": {
+			"client": {
+				"js": ["js/jquery.min.js"]
+			}
+		},
+		"bootstrap>=4.1.1": {
+			"client": {
+				"css": ["css/bootstrap.min.css"],
+				"js": ["js/bootstrap.min.js"]
+			}
+		},
+		"popper": {
+			"client": {
+				"js": ["js/popper.min.js"]
+			}
+		},
+		"holder>=2.9.4": {
+			"client": {
+				"js": ["js/holder.min.js"]
+			}
+		}
+	},
+	"client-control": {
+		"support": {
+			"IE": ["11.0+"],
+			"Edge": ["17.0+"]
+		},
+		"unsupport": {},
+		"platform": {},
+		"static-resource": {
+			"js": ["js/modal-control.js"],
+			"css": ["css/modal-control.css"],
+			"pic": ["pic/loading-middle.gif"]
+		}
+	},
+	"init-para-def": {
+		"pageloading-template": {
+			"show-name": "页面装载模态框模板",
+			"tips": "新组件通过自己的模板文件改变模态框样式",
+			"type": "group",
+			"sub-para": {
+				"file": {
+					"show-name": "模板文件",
+					"tips": "选择样式所在的模板文件",
+					"type": "template",
+					"default": ""
+				},
+				"name": {
+					"show-name": "模板名",
+					"tips": "模板文件中的模板名",
+					"type": "text",
+					"default": ""
+				}
+			}
+		},
+		"pageloading-opts": {
+			"show-name": "自动创建页面装载模态框",
+			"tips": "设置页面装载时自动创建模态框的参数",
+			"type": "group",
+			"sub-para": {
+				"pre-create": {
+					"show-name": "预建模态框",
+					"tips": "在页面装载时自动创建模态框对象",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"id": {
+					"show-name": "模态框ID",
+					"tips": "唯一标识模态框",
+					"type": "text",
+					"default": "pageLoadingModalId"
+				},
+				"auto-show": {
+					"show-name": "预建时自动显示",
+					"tips": "在页面装载时自动创建并显示模态框",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"set-default": {
+					"show-name": "设置为默认值",
+					"tips": "是否将参数设置为默认值",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"showOnCreate": {
+					"show-name": "创建时直接显示",
+					"tips": "是否在创建时直接显示模态框",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"rebuildOnShow": {
+					"show-name": "显示时重建对象",
+					"tips": "显示时是否重建（如果ID已存在的情况下，删除原模态框并重新建立）",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"destroyOnHide": {
+					"show-name": "隐藏时销毁对象",
+					"tips": "隐藏时是否销毁模态框对象",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"fade": {
+					"show-name": "动画效果",
+					"tips": "是否要过度动画效果，有动画效果的情况下，show/hide等操作需注意不能在一个函数内执行（JS单线程会阻塞渲染，导致同一个函数内执行的操作没有效果）",
+					"type": "list",
+					"default": "Y",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"backdrop": {
+					"show-name": "点击空白处响应",
+					"tips": "bootstrap的modal参数，static代表点击空白处不关闭，true代表点击空白处关闭",
+					"type": "list",
+					"default": "static",
+					"option": {
+						"不关闭模态框": "static",
+						"关闭模态框": "true"
+					}
+				},
+				"keyboard": {
+					"show-name": "按ESC是否关闭",
+					"tips": "bootstrap的modal参数，当按退出按钮（ESC）时是否关闭",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"focus": {
+					"show-name": "显示时获得焦点",
+					"tips": "bootstrap的modal参数，当启动时是否将焦点放到遮罩中",
+					"type": "list",
+					"default": "Y",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"src": {
+					"show-name": "loading图像地址",
+					"tips": "gif图像地址",
+					"type": "text",
+					"default": "../pic/loading-middle.gif"
+				},
+				"loadingText": {
+					"show-name": "提示文字",
+					"tips": "模态框中的提示文字",
+					"type": "text",
+					"default": "loading"
+				}
+			}
+		},
+		"messagebox-template": {
+			"show-name": "弹出消息框装载模态框模板",
+			"tips": "新组件通过自己的模板文件改变模态框样式",
+			"type": "group",
+			"sub-para": {
+				"file": {
+					"show-name": "模板文件",
+					"tips": "选择样式所在的模板文件",
+					"type": "template",
+					"default": ""
+				},
+				"name": {
+					"show-name": "模板名",
+					"tips": "模板文件中的模板名",
+					"type": "text",
+					"default": ""
+				}
+			}
+		},
+		"messagebox-opts": {
+			"show-name": "自动创建消息模态框",
+			"tips": "设置页面装载时自动创建模态框的参数",
+			"type": "group",
+			"sub-para": {
+				"pre-create": {
+					"show-name": "预建模态框",
+					"tips": "在页面装载时自动创建模态框对象",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"id": {
+					"show-name": "模态框ID",
+					"tips": "唯一标识模态框",
+					"type": "text",
+					"default": "messageBoxModalId"
+				},
+				"auto-show": {
+					"show-name": "预建时自动显示",
+					"tips": "在页面装载时自动创建并显示模态框",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"set-default": {
+					"show-name": "设置为默认值",
+					"tips": "是否将参数设置为默认值",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"showOnCreate": {
+					"show-name": "创建时直接显示",
+					"tips": "是否在创建时直接显示模态框",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"rebuildOnShow": {
+					"show-name": "显示时重建对象",
+					"tips": "显示时是否重建（如果ID已存在的情况下，删除原模态框并重新建立）",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"destroyOnHide": {
+					"show-name": "隐藏时销毁对象",
+					"tips": "隐藏时是否销毁模态框对象",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"fade": {
+					"show-name": "动画效果",
+					"tips": "是否要过度动画效果，有动画效果的情况下，show/hide等操作需注意不能在一个函数内执行（JS单线程会阻塞渲染，导致同一个函数内执行的操作没有效果）",
+					"type": "list",
+					"default": "Y",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"backdrop": {
+					"show-name": "点击空白处响应",
+					"tips": "bootstrap的modal参数，static代表点击空白处不关闭，true代表点击空白处关闭",
+					"type": "list",
+					"default": "static",
+					"option": {
+						"不关闭模态框": "static",
+						"关闭模态框": "true"
+					}
+				},
+				"keyboard": {
+					"show-name": "按ESC是否关闭",
+					"tips": "bootstrap的modal参数，当按退出按钮（ESC）时是否关闭",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"focus": {
+					"show-name": "显示时获得焦点",
+					"tips": "bootstrap的modal参数，当启动时是否将焦点放到遮罩中",
+					"type": "list",
+					"default": "Y",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"boxType": {
+					"show-name": "消息框类型",
+					"tips": "消息框类型, alert-单按钮消息框, yesno-双按钮消息框",
+					"type": "list",
+					"default": "alert",
+					"option": {
+						"单按钮消息框": "alert",
+						"双按钮消息框": "yesno"
+					}
+				},
+				"sizes": {
+					"show-name": "消息框类型",
+					"tips": "消息框大小, lg 大, md 中等, sm 小",
+					"type": "list",
+					"default": "md",
+					"option": {
+						"大": "lg",
+						"中": "md",
+						"小": "sm"
+					}
+				},
+				"titleText": {
+					"show-name": "标题文字",
+					"tips": "消息框标题文字",
+					"type": "text",
+					"default": "MessageBox"
+				},
+				"contentText-type": {
+					"show-name": "提示信息类型",
+					"tips": "消息框提示文字可以传入html代码和jquery对象，当为jquery对象时，会将该对象移入模态框中（置为显示），当发生变更或销毁时时会将对象移出到原来的位置（并隐藏）",
+					"type": "list",
+					"default": "html",
+					"option": {
+						"html代码": "html",
+						"jquery对象": "jquery"
+					}
+				},
+				"contentText": {
+					"show-name": "提示文字",
+					"tips": "根据提示信息类型，如果是jquery对象应输入对象访问变量名",
+					"type": "text",
+					"default": ""
+				},
+				"closeBtnText": {
+					"show-name": "关闭按钮文字",
+					"tips": "关闭按钮文字",
+					"type": "text",
+					"default": "关闭"
+				},
+				"hideCloseIcon": {
+					"show-name": "隐藏关闭图标",
+					"tips": "隐藏右上角的关闭窗口图标",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"disableDefaultCloseEvent": {
+					"show-name": "屏蔽默认关闭事件",
+					"tips": "是否屏蔽关闭按钮的默认关闭提示框事件，如果需要自行实现方法可设置该参数",
+					"type": "list",
+					"default": "N",
+					"option": {
+						"是": "Y",
+						"否": "N"
+					}
+				},
+				"CloseEvent": {
+					"show-name": "关闭按钮事件",
+					"tips": "输入自定义关闭按钮事件函数名，参数为function (event){alert(event.data.modalObj);alert(event.data.modalType);alert(event.data.eventName);}",
+					"type": "text",
+					"default": ""
+				},
+				"yesBtnText": {
+					"show-name": "确认按钮文本",
+					"tips": "确认按钮文本",
+					"type": "text",
+					"default": "确定"
+				},
+				"yesBtnEvent": {
+					"show-name": "确认按钮事件",
+					"tips": "输入自定义确认按钮事件函数名，参数为function (event){alert(event.data.modalObj);alert(event.data.modalType);alert(event.data.eventName);}",
+					"type": "text",
+					"default": ""
+				}
+			}
+		}
+	}
 }
