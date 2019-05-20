@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<server>
+    <logger>
+        <!--
+            日志配置
+            type : 日志类型，LOCAL-本地日志，RPC-远程日志（RPC异步记录）
+            rpc-service-name : RPC服务名，通过注册服务器获取实际地址，远程日志时必填
+            rpc-host : 如果没有设置rpc注册服务器，默认的rpc服务地址
+            rpc-port : 如果没有设置rpc注册服务器，默认的rpc服务端口
+        -->
+        <type>LOCAL</type>
+        <rpc-service-name></rpc-service-name>
+        <rpc-host></rpc-host>
+        <rpc-port></rpc-port>
+    </logger>
+    <rpc>
+        <!--
+            RPC服务配置
+            regedit-server : RPC注册服务地址和端口的配置，可以设置多个注册服务器地址，有故障通过轮询方式转移服务器
+                host : 注册服务器地址
+                port : 注册服务器端口
+                type : 注册服务器类型，目前仅支持CONSUL
+        -->
+        <regedit-server>
+            <host></host>
+            <port></port>
+            <type>CONSUL</type>
+        </regedit-server>
+    </rpc>
+</server>

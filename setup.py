@@ -23,7 +23,7 @@ SHORT_DESCRIPTION = """
 基于HTML模板控件和灵活配置的快速Web应用框架.""".strip()
 
 DEPENDENCIES = [
-    'tornado>=5.0.2'
+    'tornado>=6.0.2'
 ]
 
 # DEPENDENCIES = []
