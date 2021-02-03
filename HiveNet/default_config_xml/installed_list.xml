@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installed>
+    <!--
+        dealer_router : 处理类路由配置
+            [dealer_type] : 服务处理类的类型，例如servicer-后台服务处理类，static-静态资源处理类
+                [type] : 标签tag为服务的类型，例如py (Python的后台服务类型)
+                    default_class : 默认处理类，可以通过动态方式加载
+                        extend_path : 模块所在路径(增加搜索路径)
+                        module_name : 要装载的模块名
+                        class_name : 处理类名
+                    control_name : 获取处理类的HiveNet控件名
+                    control_version : 可支持的控件版本，可配置的方式如下:
+                        空代表支持所有版本的处理
+                        主版本号.次版本号.修订版本号 : 仅支持指定版本处理
+                        >主版本号.次版本号.修订版本号 : 支持指定版本以上的版本处理
+                        <主版本号.次版本号.修订版本号 : 支持指定版本以下的版本处理
+                        主版本号.次版本号.修订版本号-主版本号.次版本号.修订版本号 : 支持指定两个版本之间的版本版本处理
+                    call_name : 模块的访问名
+                    class_name : 处理类名
+        AppLib_list : 已安装应用库列表
+            AppLib_name : 列表中的每个已安装应用的标签为应用名
+                version : 每个包下按版本列出所有标签（注意这个版本不包含“.<修订日期>_阶段版本”的内容）
+                    install_status : 应用库的安装状态，正常为done, 安装中为installing
+                    base_info : 应用库的基本信息
+                    servicer : 后台服务配置
+                        as_class_name : 类别名转换配置(所有后台服务功能配置)
+                        extend_path : 要额外添加的搜索路径(对于非控件路径中的其他文件有效)
+                            多个路径使用'|'分隔
+                        module : 要导入的python模块清单
+                            [call_name] : tag为导入模块的访问名(call_name), 值为模块的模块名（注意需含包的路径）
+                    self_control : 应用私有控件清单
+                        Control_name : 控件清单的控件名为标签
+                            servicer : 后台服务配置
+                                as_class_name : 类别名转换配置(所有后台服务功能配置)
+                                extend_path : 要额外添加的搜索路径(对于非控件路径中的其他文件有效)
+                                    多个路径使用'|'分隔
+                                module : 要导入的python模块清单
+                                    [call_name] : tag为导入模块的访问名(call_name), 值为模块的模块名（注意需含包的路径）
+        Control_list : 已安装控件包列表
+            Control_name : 列表中的每个已安装控件的标签为控件名
+                version : 每个包下按版本列出所有标签（注意这个版本不包含“.<修订日期>_阶段版本”的内容）
+                    install_status : 标识控件的安装状态，正常为done, 安装中为installing
+                    base_info : 控件的基本信息
+                    servicer : 后台服务配置
+                        as_class_name : 类别名转换配置(所有后台服务功能配置)
+                        extend_path : 要额外添加的搜索路径(对于非控件路径中的其他文件有效)
+                            多个路径使用'|'分隔
+                        module : 要导入的python模块清单
+                            [call_name] : tag为导入模块的访问名(call_name), 值为模块的模块名（注意需含包的路径）
+
+        App_list : 已安装的应用列表（创建的应用）
+    -->
+    <base_control_config>
+        <!--
+            基础控件配置，可以指定基础服务所必需的控件信息
+        -->
+        <Installer>
+            <!-- 安装服务控件 -->
+            <default_class>
+                <extend_path></extend_path>
+                <module_name>HiveNet.lib.installer</module_name>
+                <class_name>BaseInstaller</class_name>
+            </default_class>
+            <control_name>HiveNetInstaller</control_name>
+            <control_version></control_version>
+            <call_name>installer</call_name>
+            <class_name>Installer</class_name>
+        </Installer>
+        <PackageNodeRouter>
+            <!-- 包节点类路由访问控件 -->
+            <default_class>
+                <extend_path></extend_path>
+                <module_name>HiveNet.lib.control_router</module_name>
+                <class_name>PackageNodeRouter</class_name>
+            </default_class>
+            <control_name>HiveNetControlRouter</control_name>
+            <control_version></control_version>
+            <call_name>router</call_name>
+            <class_name>PackageNodeRouter</class_name>
+        </PackageNodeRouter>
+    </base_control_config>
+    <router_package_node>
+        <!-- 控件包/应用库包节点处理对象访问路由配置 -->
+        <resource_list>
+            <!-- 默认的资源处理类路由类配置-->
+            <is_init>true</is_init>
+            <init_para>
+                <!-- 服务控件的初始化参数, 以标签字典方式配置 -->
+            </init_para>
+            <default_class>
+                <extend_path></extend_path>
+                <module_name>HiveNet.lib.control_router</module_name>
+                <class_name>ResourceListRouter</class_name>
+            </default_class>
+            <control_name>HiveNetControlRouter</control_name>
+            <control_version></control_version>
+            <call_name>router</call_name>
+            <class_name>ResourceListRouter</class_name>
+        </resource_list>
+    </router_package_node>
+    <router_resource_list>
+        <!-- 默认的资源处理类路由配置 -->
+        <static_file>
+            <!-- 默认的静态资源处理类配置-->
+            <is_init>false</is_init>
+            <init_para>
+                <!-- 服务控件的初始化参数, 以标签字典方式配置 -->
+            </init_para>
+            <default_class>
+                <extend_path></extend_path>
+                <module_name>HiveNet.lib.resource_dealer</module_name>
+                <class_name>StaticResourceDealer</class_name>
+            </default_class>
+            <control_name>HiveNetResourceDealer</control_name>
+            <control_version></control_version>
+            <call_name>dealer</call_name>
+            <class_name>StaticResourceDealer</class_name>
+        </static_file>
+        <!-- 默认的资源处理类路由配置 -->
+        <py_servicer>
+            <!-- 默认的python后台服务资源处理类配置-->
+            <is_init>false</is_init>
+            <init_para>
+                <!-- 服务控件的初始化参数, 以标签字典方式配置 -->
+            </init_para>
+            <default_class>
+                <extend_path></extend_path>
+                <module_name>HiveNet.lib.resource_dealer</module_name>
+                <class_name>PyServicerResourceDealer</class_name>
+            </default_class>
+            <control_name>HiveNetResourceDealer</control_name>
+            <control_version></control_version>
+            <call_name>dealer</call_name>
+            <class_name>PyServicerResourceDealer</class_name>
+        </py_servicer>
+    </router_resource_list>
+    <AppLib_list></AppLib_list>
+    <Control_list>
+        <HiveNetDealerRouter>
+            <1.0.0>
+                <base_info>
+                    <name>HiveNetDealerRouter</name>
+                    <version>1.0.0.20200213_Release</version>
+                    <package_type>Control</package_type>
+                    <package_deal_control_name>HiveNetPackager</package_deal_control_name>
+                    <package_deal_control_verion></package_deal_control_verion>
+                    <package_deal_class_name>ControlPackager</package_deal_class_name>
+                    <description>资源处理路由控件</description>
+                    <author>黎慧剑</author>
+                    <author_email>snakeclub@163.com</author_email>
+                    <license>MPL</license>
+                    <homepage>https://github.com/snakeclub/HiveNet#readme</homepage>
+                    <tags>HiveNet, Dealer Router</tags>
+                    <platform_support>Linux,Windows</platform_support>
+                    <client_side_support></client_side_support>
+                </base_info>
+                <install_status>done</install_status>
+                <servicer>
+                    <as_class_name>
+                        <dealer_router>
+                            <ServicerRouter>ServicerRouter</ServicerRouter>
+                            <StaticRouter>StaticRouter</StaticRouter>
+                        </dealer_router>
+                    </as_class_name>
+                    <!--
+                        要额外添加的搜索路径(对于非控件路径中的其他文件有效)
+                        多个路径使用'|'分隔
+                    -->
+                    <extend_path></extend_path>
+                    <!--
+                        要导入的python模块清单
+                        tag为导入模块的访问名(call_name), 值为模块的模块名（注意需含包的路径）
+                    -->
+                    <module>
+                        <dealer_router>HiveNet.lib.dealer_router</dealer_router>
+                    </module>
+                </servicer>
+            </1.0.0>
+        </HiveNetDealerRouter>
+        <HiveNetPyServicerDealer>
+            <1.0.0>
+                <base_info>
+                    <name>HiveNetPyServicerDealer</name>
+                    <version>1.0.0.20200213_Release</version>
+                    <package_type>Control</package_type>
+                    <package_deal_control_name>HiveNetPackager</package_deal_control_name>
+                    <package_deal_control_verion></package_deal_control_verion>
+                    <package_deal_class_name>ControlPackager</package_deal_class_name>
+                    <description>python类型后台服务资源处理控件</description>
+                    <author>黎慧剑</author>
+                    <author_email>snakeclub@163.com</author_email>
+                    <license>MPL</license>
+                    <homepage>https://github.com/snakeclub/HiveNet#readme</homepage>
+                    <tags>HiveNet, Servicer Dealer, Python</tags>
+                    <platform_support>Linux,Windows</platform_support>
+                    <client_side_support></client_side_support>
+                </base_info>
+                <install_status>done</install_status>
+                <servicer>
+                    <as_class_name>
+                        <servicer>
+                            <PyServicerDealer>PyServicerDealer</PyServicerDealer>
+                        </servicer>
+                    </as_class_name>
+                    <!--
+                        要额外添加的搜索路径(对于非控件路径中的其他文件有效)
+                        多个路径使用'|'分隔
+                    -->
+                    <extend_path></extend_path>
+                    <!--
+                        要导入的python模块清单
+                        tag为导入模块的访问名(call_name), 值为模块的模块名（注意需含包的路径）
+                    -->
+                    <module>
+                        <servicer>HiveNet.lib.servicer_dealer</servicer>
+                    </module>
+                </servicer>
+            </1.0.0>
+        </HiveNetPyServicerDealer>
+        <HiveNetInstaller>
+            <1.0.0>
+                <base_info>
+                    <!--
+                        控件基本信息，与安装包中的base_info信息项一致(复制过来)
+                        除外还包括以下信息：
+                        package_name : 安装包名
+                    -->
+                    <name>HiveNetInstaller</name>
+                    <version>1.0.0.20200213_Release</version>
+                    <package_type>Control</package_type>
+                    <package_deal_control_name>HiveNetPackager</package_deal_control_name>
+                    <package_deal_control_verion></package_deal_control_verion>
+                    <package_deal_class_name>ControlPackager</package_deal_class_name>
+                    <description>控件/应用库安装控件</description>
+                    <author>黎慧剑</author>
+                    <author_email>snakeclub@163.com</author_email>
+                    <license>MPL</license>
+                    <homepage>https://github.com/snakeclub/HiveNet#readme</homepage>
+                    <tags>HiveNet, Installer</tags>
+                    <platform_support>Linux,Windows</platform_support>
+                    <client_side_support></client_side_support>
+                </base_info>
+                <!-- 控件安装状态 -->
+                <install_status>done</install_status>
+                <servicer>
+                    <!--
+                        类别名转换配置(所有后台服务功能配置)，内部的格式为:
+                        <call_name>
+                            <asClassName1>SourceClassName1</asClassName1>
+                            <asClassName2>SourceClassName2</asClassName2>
+                        </call_name>
+                        ...
+                    -->
+                    <as_class_name>
+                        <installer>
+                            <Installer>BaseInstaller</Installer>
+                        </installer>
+                    </as_class_name>
+                    <!--
+                        要额外添加的搜索路径(对于非控件路径中的其他文件有效)
+                        多个路径使用'|'分隔
+                    -->
+                    <extend_path></extend_path>
+                    <!--
+                        要导入的python模块清单
+                        tag为导入模块的访问名(call_name), 值为模块的模块名（注意需含包的路径）
+                    -->
+                    <module>
+                        <installer>HiveNet.lib.installer</installer>
+                    </module>
+                </servicer>
+            </1.0.0>
+        </HiveNetInstaller>
+        <HiveNetPackager>
+            <1.0.0>
+                <!-- 默认安装版本 -->
+                <install_status>done</install_status>
+                <servicer>
+                    <as_class_name></as_class_name>
+                    <extend_path></extend_path>
+                    <module>
+                        <packager>HiveNet.lib.packager</packager>
+                    </module>
+                </servicer>
+            </1.0.0>
+        </HiveNetPackager>
+    </Control_list>
+    <App_list></App_list>
+</installed>

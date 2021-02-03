@@ -1,30 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
 <server>
+    <!--
+        整体配置
+        auto_start_engine : 是否自动启动当前服务引擎
+        auto_start_remote : 是否自动启动远程服务
+        use_cmd_logger : 是否使用命令行框架的日志对象
+        logger : 控制台的日志配置，如果不需要配置日志，可删除整个配置节点
+            conf_file_name : 日志配置文件路径和文件名
+            logger_name : 输出日志类型：Console_输出到屏幕,File_输出到文件,ConsoleAndFile_同时输出到屏幕和文件
+                注：根据日志具体配置，也可以在配置中自定义输出日志类型，例如myLoggerName
+            logfile_path : 日志输出文件的路径（含文件名），如果已有配置文件的情况下该参数无效，不传值时代表使用'log/程序名.log'来定义输出文件的路径
+            config_type : 日志配置文件方式: JSON_FILE _ JSON格式配置文件，INI_FILE _ INI格式配置文件，JSON_STR _ JSON字符串，XML_FILE _ XML格式配置文件
+                注：如果是文件类型，指定conf_file_name的配置文件格式
+            json_str : config_type为JSON_STR时，相应的JSON格式的配置信息内容
+            auto_create_conf : 是否自动创建配置文件（找不到指定的配置文件时）
+            is_create_logfile_by_day : 指定是否按天生成新的日志文件
+            call_fun_level : 指定log函数输出文件名和函数名的层级
+        remote_service : 远程控制台服务配置
+        engine_server : 服务器处理引擎相关配置
+    -->
+    <auto_start_engine>true</auto_start_engine>
+    <auto_start_remote>true</auto_start_remote>
+    <use_cmd_logger>false</use_cmd_logger>
     <logger>
-        <!--
-            日志配置
-            type : 日志类型，LOCAL-本地日志，RPC-远程日志（RPC异步记录）
-            rpc-service-name : RPC服务名，通过注册服务器获取实际地址，远程日志时必填
-            rpc-host : 如果没有设置rpc注册服务器，默认的rpc服务地址
-            rpc-port : 如果没有设置rpc注册服务器，默认的rpc服务端口
-        -->
-        <type>LOCAL</type>
-        <rpc-service-name></rpc-service-name>
-        <rpc-host></rpc-host>
-        <rpc-port></rpc-port>
+        <conf_file_name></conf_file_name>
+        <logger_name>Console</logger_name>
+        <logfile_path></logfile_path>
+        <config_type>JSON_STR</config_type>
+        <json_str>{
+                    "version": 1,
+                    "disable_existing_loggers": false,
+                    "formatters": {
+                        "simpleFormatter": {
+                            "format": "[%(asctime)s.%(millisecond)s][%(levelname)s][PID:%(process)d][TID:%(thread)d][FILE:%(filename)s][FUN:%(funcName)s]%(message)s",
+                            "datefmt": "%Y_%m_%d %H:%M:%S"
+                        }
+                    },
+
+                    "handlers": {
+                        "ConsoleHandler": {
+                            "class": "logging.StreamHandler",
+                            "level": "DEBUG",
+                            "formatter": "simpleFormatter",
+                            "stream": "ext://sys.stdout"
+                        }
+                    },
+
+                    "loggers": {
+                        "Console": {
+                            "level": "DEBUG",
+                            "handlers": ["ConsoleHandler"]
+                        }
+                    },
+
+                    "root": {
+                        "level": "DEBUG",
+                        "handlers": []
+                    }
+                }</json_str>
+        <auto_create_conf>true</auto_create_conf>
+        <is_create_logfile_by_day>true</is_create_logfile_by_day>
+        <call_fun_level>0</call_fun_level>
     </logger>
-    <rpc>
+    <remote_service>
         <!--
-            RPC服务配置
-            regedit-server : RPC注册服务地址和端口的配置，可以设置多个注册服务器地址，有故障通过轮询方式转移服务器
-                host : 注册服务器地址
-                port : 注册服务器端口
-                type : 注册服务器类型，目前仅支持CONSUL
+            远程控制台服务配置
+            remote_support : 是否提供远程连接支持
+            ip : 控制台服务绑定的IP地址
+            port : 控制台服务监听的端口
+            max_workers : 最大工作处理线程数
+            max_connect : 允许最大连接数
+            is_health_check : 是否启用健康检查服务
+            is_use_ssl : 是否使用SSL/TLS
+            private_key_certificate_chain_pairs : 证书私钥及证书链组合列表，使用SSL时必填，每一个项如下:
+                <server>
+                    <cert_file></cert_file>
+                    <key_file></key_file>
+                </server>
+            root_certificates : 客户端反向认证时（验证客户端证书）的客户端根证书路径
         -->
-        <regedit-server>
-            <host></host>
-            <port></port>
-            <type>CONSUL</type>
-        </regedit-server>
-    </rpc>
+        <remote_support>true</remote_support>
+        <ip>127.0.0.1</ip>
+        <port>50051</port>
+        <max_workers>1</max_workers>
+        <max_connect>20</max_connect>
+        <is_health_check>true</is_health_check>
+        <is_use_ssl>false</is_use_ssl>
+        <private_key_certificate_chain_pairs type='list'>
+            <server>
+                <cert_file></cert_file>
+                <key_file></key_file>
+            </server>
+        </private_key_certificate_chain_pairs>
+        <root_certificates></root_certificates>
+    </remote_service>
+    <engine_server>
+        <!--
+            服务器处理引擎相关配置
+            name : 服务名称
+            module : 服务器处理引擎所使用的代码模块（应继承HiveNet.lib.server.ServerFW）
+                module_name : 模块名，注意应包含包路径
+                class_name : 引擎处理类名
+                extend_path : 如果模块不在标准python搜索路径中，应传入搜索该模块的路径
+            logger : 服务器处理引擎的日志配置，如果不需要配置日志，可删除整个配置节点
+        -->
+        <name>HiveNetServer</name>
+        <module>
+            <module_name>HiveNet.lib.engine_server</module_name>
+            <class_name>TornadoServer</class_name>
+            <extend_path></extend_path>
+        </module>
+        <bg_server>
+            <!--
+                后台服务配置
+                root : 后台资源根目录路径，根目录下面有几个固定的子目录：
+                    installed : 已安装的控件（control子目录）和应用（applib子目录）的安装包，以及对应的安装配置(xml文件)
+                    resources : 已安装的控件和应用的服务资源路径（HiveNet-Server-Resources）
+                temp : 临时目录路径，用于处理上传、下载、控件安装的临时文件
+                disable_install_app : 是否屏蔽"InstallApp"应用，由于该应用无权限控制，建议仅在初始化时允许访问该应用，正式对外时进行屏蔽
+                default_app_name : 默认应用名（仅用域名访问时自动调整到对应app的默认页）
+                allow_bg_service : 是否允许安装带后台服务的控件（后台服务可通过代码直接访问服务器，存在风险）
+                    true - 允许; false - 禁止; sign - 允许通过HiveNet安全认证的控件安装; prompt - 提示并根据用户自行选择
+            -->
+            <root>../test_data/server/</root>
+            <temp>../test_data/server/temp/</temp>
+            <disable_install_app>false</disable_install_app>
+            <default_app_name></default_app_name>
+            <allow_bg_service>prompt</allow_bg_service>
+        </bg_server>
+        <website>
+            <!--
+                网站路径配置
+                root : 网站根目录路径
+                static : 静态资源路径 (在根目录后的路径)
+            -->
+            <root>../test_data/website/</root>
+            <static>static/</static>
+        </website>
+        <api>
+            <!--
+                RestFul Api配置
+                sub_domain : 二级域名，有值代表通过二级域名访问api接口(sub_domain/* -> domain/api/*)
+            -->
+            <sub_domain></sub_domain>
+        </api>
+        <store>
+            <!--
+                控件及应用仓库配置
+                local_store_path : 本地控件仓库路径
+                use_local_store_first : 是否使用本地控件仓库优先，如果为true，则优先从本地路径获取所需依赖控件
+                use_web_store : 是否使用在线控件仓库获取依赖控件，如果为fasle，不访问在线控件仓库
+                web_store_addr : 在线控件仓库的访问地址
+
+            -->
+            <local_store_path>../test_data/store/</local_store_path>
+            <use_local_store_first>false</use_local_store_first>
+            <use_web_store>true</use_web_store>
+            <web_store_addr>http://store.hivenet.net/</web_store_addr>
+        </store>
+        <hivenet_sign_server>
+            <!--
+                HiveNet安全认证服务
+                addr : 服务验证地址
+            -->
+            <addr>http://sign.hivenet.net</addr>
+        </hivenet_sign_server>
+        <logger>
+            <!--
+                日志输出配置，如果不需要输出日志请删除该节点
+                conf_file_name : 日志配置文件路径和文件名
+                logger_name : 输出日志类型：Console_输出到屏幕,File_输出到文件,ConsoleAndFile_同时输出到屏幕和文件
+                    注：根据日志具体配置，也可以在配置中自定义输出日志类型，例如myLoggerName
+                logfile_path : 日志输出文件的路径（含文件名），如果已有配置文件的情况下该参数无效，不传值时代表使用'log/程序名.log'来定义输出文件的路径
+                config_type : 日志配置文件方式: JSON_FILE _ JSON格式配置文件，INI_FILE _ INI格式配置文件，JSON_STR _ JSON字符串，XML_FILE _ XML格式配置文件
+                    注：如果是文件类型，指定conf_file_name的配置文件格式
+                json_str : config_type为JSON_STR时，相应的JSON格式的配置信息内容
+                auto_create_conf : 是否自动创建配置文件（找不到指定的配置文件时）
+                is_create_logfile_by_day : 指定是否按天生成新的日志文件
+                call_fun_level : 指定log函数输出文件名和函数名的层级
+            -->
+            <conf_file_name></conf_file_name>
+            <logger_name>Console</logger_name>
+            <logfile_path></logfile_path>
+            <config_type>JSON_STR</config_type>
+            <json_str>{
+                "version": 1,
+                "disable_existing_loggers": false,
+                "formatters": {
+                    "simpleFormatter": {
+                        "format": "[%(asctime)s.%(millisecond)s][%(levelname)s][PID:%(process)d][TID:%(thread)d][FILE:%(filename)s][FUN:%(funcName)s]%(message)s",
+                        "datefmt": "%Y-%m-%d %H:%M:%S"
+                    }
+                },
+
+                "handlers": {
+                    "ConsoleHandler": {
+                        "class": "logging.StreamHandler",
+                        "level": "DEBUG",
+                        "formatter": "simpleFormatter",
+                        "stream": "ext://sys.stdout"
+                    }
+                },
+
+                "loggers": {
+                    "Console": {
+                        "level": "DEBUG",
+                        "handlers": ["ConsoleHandler"]
+                    }
+                },
+
+                "root": {
+                    "level": "DEBUG",
+                    "handlers": []
+                }
+            }</json_str>
+            <auto_create_conf>true</auto_create_conf>
+            <is_create_logfile_by_day>true</is_create_logfile_by_day>
+            <call_fun_level>0</call_fun_level>
+        </logger>
+        <extend>
+            <!--
+                服务器引擎扩展配置（根据module类型可能配置不同）
+                TornadoServer的配置说明如下：
+                ip : 服务器监听绑定ip，全部ip绑定可以配置'0.0.0.0'或空
+                port : 服务器监听端口
+                process_num : 多进程启动的进程数（注意win平台不支持）
+                is_use_ssl : 是否启用ssl验证
+                cert_file : 证书文件路径 (.crt)
+                key_file : 私钥文件路径 (.key)
+                bg_server : 后台服务配置
+                website : 网站路径配置
+                api : RestFul Api配置
+                store : 控件及应用仓库配置
+                hivenet_sign_server : HiveNet安全认证服务
+            -->
+            <ip>127.0.0.1</ip>
+            <port>8888</port>
+            <process_num>1</process_num>
+            <is_use_ssl>false</is_use_ssl>
+            <cert_file></cert_file>
+            <key_file></key_file>
+        </extend>
+    </engine_server>
 </server>

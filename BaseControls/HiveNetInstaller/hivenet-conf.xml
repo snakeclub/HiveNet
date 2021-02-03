@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hivenet>
+    <!--
+        base_info : hivenet包基本属性
+        control_info : Control类型包的控件信息
+        visualization : 控件的可视化配置（安装时的可配置参数设置，以及依赖对象配置时可设置的运行参数和界面展示设置）
+    -->
+    <base_info>
+        <!--
+            hivenet包基本属性(所有hivenet包统一)
+            name : 包名，在同类型的HiveNet包中必须唯一
+            version : 包版本，采取3段式，<主版本号>.<次版本号>.<修订版本号>.<修订日期>_阶段版本
+                其中阶段版本定义如下
+                Base : 表示该软件仅仅基础框架，未包括完整功能实现
+                Alpha : 表示软件的初级版本，以实现软件功能为主，通常只在软件开发者内部交流, 存在bug较多, 是测试版本
+                Beta : 表示软件已消除了严重错误，此版本主要的修改对象是软件的非核心功能
+                RC : 表示软件版本已经相当成熟，基本不存在导致错误的Bug，与即将发行的正式版本相差无几
+                Release : 标准版，最终交付客户的版本
+            package_type : 包类型，目前支持2种类型: Control - 控件包; AppLib - 应用包;
+            package_deal_control_name : 包处理控件名，框架默认的控件名为HiveNetPackager
+            package_deal_control_verion : 可支持的控件版本，可以支持以下写法：
+                空代表支持所有版本的处理
+                主版本号.次版本号.修订版本号 : 仅支持指定版本处理
+                >主版本号.次版本号.修订版本号 : 支持指定版本以上的版本处理
+                <主版本号.次版本号.修订版本号 : 支持指定版本以下的版本处理
+                主版本号.次版本号.修订版本号-主版本号.次版本号.修订版本号 : 支持指定两个版本之间的版本版本处理
+            package_deal_control_call_name: 包处理控件的调用名, 默认控件应为packager
+            package_deal_class : 包处理类，2种包类型对应的默认处理类分别为：ControlPackager、AppLibPackager
+                可以指定使用自定义包处理类进行处理（需继承BasePackager）
+            need_reboot : 安装后是否需要重启才生效（true/false）
+            description : 包描述
+            author : 作者
+            author_email : 作者邮箱地址
+            license : 版权许可协议
+            homepage : 主页
+            tags : 标签，多个标签使用","分隔
+            platform_support : 运行平台支持，多个平台使用","分隔，标准平台分类包括：Linux、Windows
+                可以增加支持版本的说明（中间空格分隔），例如"Windows 10" 或 "Windows 7+" 或 "Windows 7~10"
+            client_side_support : 客户端支持，多类客户端使用","分隔，标准客户端分类包括：IE、Edge、Chrome、Firefox
+                可以增加支持版本的说明（中间空格分隔），例如"IE 6+"
+            install_para : 默认安装和卸载参数, 执行execution参数after_install和before_uninstall函数的参数
+            init_para : 默认的初始化参数，控件在执行execution参数after_import函数的参数
+            default_app_init_para : app启动时默认的初始化参数，控件在执行execution参数app_run_init函数的默认参数
+            execution : 运行函数
+                after_install : 安装完成后执行（仅执行一次）, 具体环节是装载后台服务之后, after_import执行之前
+                    call_name : 包自身装载的服务的call_name，必填
+                    class_name : 要调用的函数所在的类名，选填
+                    fun_name : 要调用的函数名，选填
+                    注：class_name和fun_name至少要有一个有值：
+                        1.如果两个都有值，代表执行指定类的静态函数;
+                        2.如果仅class_name有值，代表执行类构造函数；
+                        3.如果仅fun_name有值，代表直接执行包的函数；
+                        4、调用类构造函数及要运行的函数，参数形式必须统一为
+                            fun(package_type, name, version, is_self_control, self_control_name, **para)
+                before_uninstall : 卸载包之前执行
+                    设置定义与after_install一样
+                after_import : 装载后台服务之后，在安装完成，以及每次启动服务都会执行
+                    设置定义与after_install一样
+                app_run_init : app实际运行时对控件的初始化参数，在app启动的时候，根据app设置的参数执行，参数形式统一为
+                    fun(package_type, name, version, is_self_control, self_control_name, app_name, **app_init_para)
+            dependencies : 依赖的控件包列表
+                Control_name : 列表中的每个依赖控件的标签为控件名
+                    version : 依赖控件的版本要求(空代表没有版本要求)，写法可参考package_deal_control_verion
+                    install_para : 默认安装的参数, 安装包时需要传入的参数
+                    run_para : 控件在执行execution参数方法时的默认传入参数(所有方法传入同样参数, 如需区分需设置不同参数名)
+        -->
+        <name>HiveNetInstaller</name>
+        <version>1.0.0.20191114_Release</version>
+        <package_type>Control</package_type>
+        <package_deal_control_name>HiveNetPackager</package_deal_control_name>
+        <package_deal_control_verion>1.0.0</package_deal_control_verion>
+        <package_deal_control_call_name>packager</package_deal_control_call_name>
+        <package_deal_class_name>ControlPackager</package_deal_class_name>
+        <need_reboot>false</need_reboot>
+        <description>基础包</description>
+        <author></author>
+        <author_email></author_email>
+        <license>MPL</license>
+        <homepage></homepage>
+        <tags></tags>
+        <platform_support>Linux,Windows</platform_support>
+        <client_side_support></client_side_support>
+        <install_para>
+            <para1>abc</para1>
+            <para2>10</para2>
+        </install_para>
+        <init_para>
+            <para1>abc</para1>
+            <para2>10</para2>
+        </init_para>
+        <execution>
+            <after_install>
+                <call_name>servicer</call_name>
+                <class_name>asClassName1</class_name>
+                <fun_name>fun</fun_name>
+            </after_install>
+            <before_uninstall>
+                <call_name>servicer</call_name>
+                <class_name>asClassName1</class_name>
+                <fun_name>fun</fun_name>
+            </before_uninstall>
+            <after_import>
+                <call_name>servicer</call_name>
+                <class_name>asClassName1</class_name>
+                <fun_name>fun</fun_name>
+            </after_import>
+            <app_run_init>
+                <call_name>servicer</call_name>
+                <class_name>asClassName1</class_name>
+                <fun_name>fun</fun_name>
+            </app_run_init>
+        </execution>
+        <dependencies>
+            <HiveNetInstaller>
+                <version>>1.0.0</version>
+                <run_para>
+                    <para1>abc</para1>
+                    <para2>10</para2>
+                </run_para>
+            </HiveNetInstaller>
+        </dependencies>
+    </base_info>
+    <control_info>
+        <!--
+            Control类型包的控件信息(标准包)
+            resource_list : 需处理资源清单
+                type : 资源类型(公共配置，用于判断所使用的资源处理控件）, 默认支持的类型包括:
+                    static_file - 网站静态资源, 该类资源配置项包括:
+                        copy_list : 需复制的路径或文件清单(包中web-static目录的相对路径), 多个复制项以'|'分隔
+                        注：应使用安装包的相对路径, 将复制至web服务器对应控件静态目录的相同路径上
+                    py_servicer - python后台服务资源, 该类资源配置项包括:
+                        as_class_name : 类别名配置, 用于通过标准别名访问类(支持控件替换兼容的情况)
+                            [call_name] : 别名所在的模块访问名，内部放置多个类别名设置
+                                [As_class_name] : 标签为类别名, 标签值为类真实调用名
+                        import_type : 装载类型, 支持:
+                            lib - 装载已安装的库模块(例如HiveNetLib.simple_log), 如果要装载多个需要分开多个资源配置
+                            file - 装载指定文件, 可支持装载多个文件
+                            path - 装载指定路径下的py文件, 可支持装载多个目录
+                        lib类型的配置:
+                            module_name : 要装载的模块名
+                            module_path : 模块所在路径(增加搜索路径)
+                            call_name : 模块的访问名
+                        file类型的配置:
+                            file_list : 要装载的文件配置清单, 格式为'文件路径1^调用名1|...', 文件路径和调用名以'^'分隔,
+                                如果调用名为空('文件路径1'或'文件路径1^')时使用文件名(不含扩展名)作为访问名,
+                                多个文件配置使用'|'分隔
+                                注:文件路径以包中service目录的相对路径
+                        path类型的配置:
+                            path_list : 要装载的路径配置清单, 如果为空, 代表装载整个service目录, 多个路径之间使用'|'分隔,
+                                注:路径以包中service目录的相对路径
+        -->
+        <resource_list type="list">
+            <resource>
+                <type>static_file</type>
+                <copy_list>js|css/my.css</copy_list>
+            </resource>
+            <resource>
+                <type>py_servicer</type>
+                <as_class_name>
+                    <servicer>
+                        <asClassName1>SourceClassName1</asClassName1>
+                        <asClassName2>SourceClassName2</asClassName2>
+                    </servicer>
+                </as_class_name>
+                <import_type>lib</import_type>
+                <module_name>HiveNet.lib.servicer</module_name>
+                <module_path></module_path>
+                <call_name>servicer</call_name>
+            </resource>
+        </resource_list>
+    </control_info>
+    <visualization>
+        <!--
+            控件的可视化配置（安装时的可配置参数设置，以及依赖对象配置时可设置的运行参数和界面展示设置）
+            install_para : 安装时的可配置参数设置，将基于该设置自动生成配置操作界面
+        -->
+        <install_para>
+
+        </install_para>
+    </visualization>
+</hivenet>

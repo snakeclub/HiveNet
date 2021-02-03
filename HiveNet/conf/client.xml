@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<console>
+    <!--
+        控制台客户端配置
+        auto_connect_server : 启动后自动连接的服务器id
+        logger : 控制台的日志配置，如果不需要配置日志，可删除整个配置节点
+        server_list : 可连接的远程服务器配置
+    -->
+    <auto_connect_server></auto_connect_server>
+    <use_cmd_logger>false</use_cmd_logger>
+    <logger>
+        <!--
+            日志输出配置，如果不需要输出日志请删除该节点
+            conf_file_name : 日志配置文件路径和文件名
+            logger_name : 输出日志类型：Console_输出到屏幕,File_输出到文件,ConsoleAndFile_同时输出到屏幕和文件
+                注：根据日志具体配置，也可以在配置中自定义输出日志类型，例如myLoggerName
+            logfile_path : 日志输出文件的路径（含文件名），如果已有配置文件的情况下该参数无效，不传值时代表使用'log/程序名.log'来定义输出文件的路径
+            config_type : 日志配置文件方式: JSON_FILE _ JSON格式配置文件，INI_FILE _ INI格式配置文件，JSON_STR _ JSON字符串，XML_FILE _ XML格式配置文件
+                注：如果是文件类型，指定conf_file_name的配置文件格式
+            json_str : config_type为JSON_STR时，相应的JSON格式的配置信息内容
+            auto_create_conf : 是否自动创建配置文件（找不到指定的配置文件时）
+            is_create_logfile_by_day : 指定是否按天生成新的日志文件
+            call_fun_level : 指定log函数输出文件名和函数名的层级
+        -->
+        <conf_file_name></conf_file_name>
+        <logger_name>Console</logger_name>
+        <logfile_path></logfile_path>
+        <config_type>JSON_STR</config_type>
+        <json_str>{
+            "version": 1,
+            "disable_existing_loggers": false,
+            "formatters": {
+                "simpleFormatter": {
+                    "format": "[%(asctime)s.%(millisecond)s][%(levelname)s][PID:%(process)d][TID:%(thread)d][FILE:%(filename)s][FUN:%(funcName)s]%(message)s",
+                    "datefmt": "%Y-%m-%d %H:%M:%S"
+                }
+            },
+
+            "handlers": {
+                "ConsoleHandler": {
+                    "class": "logging.StreamHandler",
+                    "level": "DEBUG",
+                    "formatter": "simpleFormatter",
+                    "stream": "ext://sys.stdout"
+                }
+            },
+
+            "loggers": {
+                "Console": {
+                    "level": "DEBUG",
+                    "handlers": ["ConsoleHandler"]
+                }
+            },
+
+            "root": {
+                "level": "DEBUG",
+                "handlers": []
+            }
+        }</json_str>
+        <auto_create_conf>true</auto_create_conf>
+        <is_create_logfile_by_day>true</is_create_logfile_by_day>
+        <call_fun_level>0</call_fun_level>
+    </logger>
+    <server_list type='list'>
+        <server>
+            <!--
+                控制台服务连接配置
+                id : 服务标识，在清单中应唯一
+                ip : 要连接的服务器IP
+                port : 要连接的服务器端口
+                conn_str : 连接字符串，如果传入该字符串则不再使用ip和端口方式连接
+                    连接字符串的格式如下：'ip协议(ipv4|ipv6):///ip1:port1,ip2:port2,...'
+                    例如"ipv4:///1.2.3.4:9999,1.2.3.5:9999,1.2.3.6:9999"
+                        "ipv6:///[1::2]:9999,[1::3]:9999,[1::4]:9999"
+                timeout : 超时时间，单位为秒
+                is_use_ssl : 是否使用SSL/TLS
+                root_certificates : 用于验证服务器证书的根证书，即服务器端的公钥证书
+                private_key : 当反向认证时（服务器验证客户端证书），客户端的私钥文件
+                certificate_chain : 当反向认证时（服务器验证客户端证书），客户端的公钥证书文件
+                test_on_connect : 连接时进行有效性测试
+                test_use_health_check : 使用标准的health_check进行测试
+                use_cmd_logger : 是否使用控制台的日志对象记录日志
+            -->
+            <id>HiveNetServer</id>
+            <ip>127.0.0.1</ip>
+            <port>50051</port>
+            <conn_str></conn_str>
+            <timeout>0</timeout>
+            <is_use_ssl>false</is_use_ssl>
+            <root_certificates></root_certificates>
+            <private_key></private_key>
+            <certificate_chain></certificate_chain>
+            <test_on_connect>true</test_on_connect>
+            <test_use_health_check>true</test_use_health_check>
+        </server>
+    </server_list>
+</console>

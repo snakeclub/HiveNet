@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<installed>
+  <!--
+                applib : 已安装应用库列表
+                control : 已安装控件包列表
+                app : 已安装的应用列表（创建的应用）
+            -->
+  <applib type="list"/>
+  <control type="list"/>
+  <app>type='list'&gt;</app>
+</installed>
